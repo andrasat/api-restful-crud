@@ -10,7 +10,6 @@ module.exports = {
           console.error(err)
           res.send(fail)
         } else {
-          console.log('Data found :', memos)
           res.send({success: true, data: memos, msg: 'Data found'})
         }
       })
@@ -18,16 +17,17 @@ module.exports = {
   createMemo: (req, res)=> {
     new Memo({
       title: req.body.title,
-      content: req.body.content
-    }).save()
-      .exec((err, memo)=> {
-        if(err) {
-          console.error(err)
-          res.send(fail)
-        } else {
-          res.send({success: true, data: memo, msg: 'Create success'})
-        }
-      })
+      content: req.body.content,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).save((err, memo)=> {
+      if(err) {
+        console.error(err)
+        res.send(fail)
+      } else {
+        res.send({success: true, data: memo, msg: 'Create success'})
+      }
+    })
   },
   findOneMemo: (req, res)=> {
     Memo.findOne({_id: req.params.id})
